@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1699036256 source:c:\users\artbe\onedrive - usherbrooke\app5a\distribution\app5a\gestion_images.c
+	<stdio.h>
+	"bibliotheque_images.h"
+
+1699036228 c:\users\artbe\onedrive - usherbrooke\app5a\distribution\app5a\bibliotheque_images.h
+	<stdio.h>
+
