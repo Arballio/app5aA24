@@ -45,10 +45,27 @@ int pgm_copier(int matrice1[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int colonnes
 
 int pgm_creer_histogramme(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes, int histogramme[MAX_VALEUR+1])
 {
-	int status = ERREUR;
+    int status = ERREUR;
+    int k = 0;
+    for(int i = 0; i <= MAX_VALEUR;i++)
+    {
+        for(int j = 0; j<lignes; j++)
+        {
+            for(int n = 0; n<colonnes; n++)
+            {
+                int m = matrice[n][j];
 
-	return status;
-}
+                if(m == i)
+                {
+                    histogramme[i] += 1;
+                }
+            }
+        }
+
+    }
+    status = OK;
+    return status;
+};
 
 int pgm_couleur_preponderante(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes)
 {
