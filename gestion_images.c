@@ -56,7 +56,8 @@ int main()
 	if (retour == OK){
 		printf("-> OK\n\r");
 		if((metadonnees.auteur[0]) != '\0'){
-			printf("Auteur = %s, Date = %s, Lieu = %s\n\r",metadonnees.auteur,metadonnees.dateCreation,metadonnees.lieuCreation);}
+			printf("Auteur = %s, Date = %s, Lieu = %s\n\r",
+                metadonnees.auteur,metadonnees.dateCreation,metadonnees.lieuCreation);}
 		printf("Line = %d, Colonne = %d\n\r",lignes1,colonnes1);
 		printf("max value = %d",maxval);
 
@@ -80,7 +81,7 @@ int main()
     printf("-> Fin!\n");
 
 	char a;
-    scanf("%c",&a);
+   scanf("%c",&a);
 
     return 0;
 }

@@ -13,7 +13,7 @@ Description: Fichier de distribution pour GEN145.
 //						Fonction privé
 /********************************************************************/
 
-//Cette fontion retire la première string des metadatas. Commence a 0
+//Cette fontion retire le premier token des metadatas. Commence a 0
 void MetaParser(char *strIN,char *strOUT, int pos)
 {
 	int i = 0;
@@ -109,6 +109,7 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 
 		//Gestion tableau
 
+		//V2
 		int i = 0,L = 0,C = 0;
 		char temp[20] = {0};
 
@@ -121,7 +122,12 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 
 
 			int j = 0;
-			while(tempbuffer[i] != ' ' && tempbuffer[i] != '\n' && tempbuffer[i] != '\r'){temp[j++] = tempbuffer[i++];}
+
+			while(tempbuffer[i] != ' ' && tempbuffer[i] != '\n' && tempbuffer[i] != '\r')
+            {
+					temp[j] = tempbuffer[i];
+					j++;i++;
+            }
 
 			i++;
 
@@ -132,33 +138,42 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 					i = 0;
 				}
 
-
 			if(L < *p_lignes)
 			{
-				if(C<*p_colonnes)
-				{
+				if(C<*p_colonnes){
 					matrice[L][C] = atoi(temp);
 					C++;
 				}else{
 					C=0;
 					L++;
 					matrice[L][C] = atoi(temp);
+					C++;
 				}
-			}else{
-			break;
 			}
+			else if(tempbuffer[i] == '\0')//Fin du fichier
+			{
+				return OK;
+			}
+			else
+			{
+					break;
+			}
+
 			memset(temp,0,sizeof(temp));
 
 
 			}
 		}
 
+		memset(tempbuffer,0x30,sizeof(tempbuffer));
 
+        //V1
 		/*for(int R = 0;R<(*p_lignes);R++)
 			{
 				for(int L = 0;L<*p_colonnes;L++)
 				{
-					tempbuffer[0] = fgetc(fp);
+					//tempbuffer[0] = fgetc(fp);
+
 					for(int i = 0; 0x29 <tempbuffer[i] && tempbuffer[i]<0x40 ;i++){
 						tempbuffer[i] = fgetc(fp);
 					}
@@ -166,7 +181,7 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 					fgetc(fp);
 
 					matrice[R][L] = atoi(tempbuffer);
-					memset(tempbuffer,0,sizeof(tempbuffer));
+					memset(tempbuffer,0x30,sizeof(tempbuffer));
 				}
 			}*/
 
@@ -238,21 +253,21 @@ int pgm_couleur_preponderante(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes,
 	return status;
 }
 
-int pgm_eclaircir_noircir(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes, int maxval, int valeur)
+int pgm_eclaircir_noircir(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes, int maxval, int valeur)//#TODO
 {
 	int status = ERREUR;
 
 	return status;
 }
 
-int pgm_creer_negatif(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes, int maxval)
+int pgm_creer_negatif(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes, int maxval)//#TODO
 {
 	int status = ERREUR;
 
 	return status;
 }
 
-int pgm_extraire(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int colonnes1, int lignes2, int colonnes2, int *p_lignes, int *p_colonnes)
+int pgm_extraire(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int colonnes1, int lignes2, int colonnes2, int *p_lignes, int *p_colonnes)//#TODO
 {
 	int status = ERREUR;
 

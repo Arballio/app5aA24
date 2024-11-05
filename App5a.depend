@@ -1,20 +1,13 @@
 # depslib dependency file v1.0
-1699036256 source:c:\users\artbe\onedrive - usherbrooke\app5a\distribution\app5a\gestion_images.c
-	<stdio.h>
+1730849178 source:c:\users\artbe\documents\uni\a2024\app5a\app5aa24\bibliotheque_images.c
 	"bibliotheque_images.h"
 
-1699036228 c:\users\artbe\onedrive - usherbrooke\app5a\distribution\app5a\bibliotheque_images.h
-	<stdio.h>
-
-1730753191 source:c:\users\artbe\documents\uni\app5a\app5aa24\gestion_images.c
-	<stdio.h>
-	"bibliotheque_images.h"
-
-1730740678 c:\users\artbe\documents\uni\app5a\app5aa24\bibliotheque_images.h
+1730827302 c:\users\artbe\documents\uni\a2024\app5a\app5aa24\bibliotheque_images.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 
-1730769515 source:c:\users\artbe\documents\uni\app5a\app5aa24\bibliotheque_images.c
+1730848227 source:c:\users\artbe\documents\uni\a2024\app5a\app5aa24\gestion_images.c
+	<stdio.h>
 	"bibliotheque_images.h"
 
