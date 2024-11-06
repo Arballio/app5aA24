@@ -402,9 +402,28 @@ int ppm_ecrire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR],
 
 int ppm_copier(struct RGB matrice1[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int colonnes1, struct RGB matrice2[MAX_HAUTEUR][MAX_LARGEUR], int *p_lignes2, int *p_colonnes2)
 {
-	int status = ERREUR;
+    if(lignes1 == 0 || colonnes1 == 0)
+    {
+        return ERREUR;
+    }
+    else
+    {
+        *p_lignes2 = lignes1;
+        *p_colonnes2 = colonnes1;
 
-	return status;
+        for(int L = 0; L < lignes1; L++)    // Augmenter l pendant que l est plus petit que la taille en lignes des matrices
+            {
+                //fprintf(fp,"\r");               //Imprimer le début d'une rangée
+
+                for(int C = 0; C< colonnes1;C++)  // Augmenter c pendant que c est plus petit que la taille en colonnes des matrices
+                {
+                    matrice2[L][C].valeurR = matrice1[L][C].valeurR;
+                    matrice2[L][C].valeurG = matrice1[L][C].valeurG;
+                    matrice2[L][C].valeurB = matrice1[L][C].valeurB;
+                }
+            }
+	return OK;
+    }
 }
 
 int ppm_sont_identiques(struct RGB matrice1[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int colonnes1, struct RGB matrice2[MAX_HAUTEUR][MAX_LARGEUR], int lignes2, int colonnes2)

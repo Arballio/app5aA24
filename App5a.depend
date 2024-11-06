@@ -8,11 +8,12 @@
 	<string.h>
 
 1730912876 source:c:\users\artbe\documents\uni\a2024\app5a\app5aa24\gestion_images.c
-<<<<<<< HEAD
+
+1730912876 D
 	<stdio.h>
 	"bibliotheque_images.h"
 
-1730912320 source:c:\users\mikmi\onedrive - usherbrooke\s1\app5a\app5aa24\bibliotheque_images.c
+1730928782 source:c:\users\mikmi\onedrive - usherbrooke\s1\app5a\app5aa24\bibliotheque_images.c
 	"bibliotheque_images.h"
 
 1730860923 c:\users\mikmi\onedrive - usherbrooke\s1\app5a\app5aa24\bibliotheque_images.h
@@ -20,9 +21,11 @@
 	<stdlib.h>
 	<string.h>
 
-1730912344 source:c:\users\mikmi\onedrive - usherbrooke\s1\app5a\app5aa24\gestion_images.c
-=======
->>>>>>> origin/main
+1730914148 source:c:\users\mikmi\onedrive - usherbrooke\s1\app5a\app5aa24\gestion_images.c
+	<stdio.h>
+	"bibliotheque_images.h"
+
+1730912344 gin/main
 	<stdio.h>
 	"bibliotheque_images.h"
 
