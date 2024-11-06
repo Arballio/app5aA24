@@ -6,3 +6,5 @@ bin/
 App5a.layout
 
 *.o
+
+*.exe
