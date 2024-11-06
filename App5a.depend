@@ -8,6 +8,7 @@
 	<string.h>
 
 1730912876 source:c:\users\artbe\documents\uni\a2024\app5a\app5aa24\gestion_images.c
+<<<<<<< HEAD
 	<stdio.h>
 	"bibliotheque_images.h"
 
@@ -20,6 +21,8 @@
 	<string.h>
 
 1730912344 source:c:\users\mikmi\onedrive - usherbrooke\s1\app5a\app5aa24\gestion_images.c
+=======
+>>>>>>> origin/main
 	<stdio.h>
 	"bibliotheque_images.h"
 
