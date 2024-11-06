@@ -330,9 +330,65 @@ int pgm_sont_identiques(int matrice1[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int
 
 int pgm_pivoter90(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int *p_lignes, int *p_colonnes, int sens)
 {
-	int status = ERREUR;
+int status = ERREUR;
+    int matriceTemp[MAX_HAUTEUR][MAX_LARGEUR];
+    int k = *p_lignes,temp;
+    switch(sens)
+    {
+    default :
+        status = ERREUR;
+        break;
 
+    case SENS_ANTIHORAIRE:
+        for(int j = 0 ; j<*p_lignes; j++)
+        {
+            k = *p_lignes;
+            for(int n = 0; n< *p_colonnes; n++)
+            {
+                k--;
+                matriceTemp[k][j] = matrice[j][n];
+            }
+        }
+         for(int j = 0; j<*p_lignes; j++)
+        {
+            for(int n = 0; n<*p_colonnes; n++)
+            {
+                matrice[n][j] = matriceTemp[n][j];
 
+            }
+        }
+        temp = *p_colonnes;
+        *p_colonnes = *p_lignes;
+        *p_lignes = temp;
+        status = OK;
+        status = OK;
+        break;
+
+    case SENS_HORAIRE:
+
+         for(int j = 0 ; j<*p_lignes; j++)
+        {
+            k--;
+            for(int n = 0; n< *p_colonnes; n++)
+            {
+                matriceTemp[n][k] = matrice[j][n];
+            }
+        }
+         for(int j = 0; j<*p_lignes; j++)
+        {
+            for(int n = 0; n<*p_colonnes; n++)
+            {
+                matrice[n][j] = matriceTemp[n][j];
+
+            }
+        }
+         temp = *p_colonnes;
+        *p_colonnes = *p_lignes;
+        *p_lignes = temp;
+
+        status = OK;
+        break;
+    }
 	return status;
 }
 
@@ -368,8 +424,72 @@ int ppm_sont_identiques(struct RGB matrice1[MAX_HAUTEUR][MAX_LARGEUR], int ligne
 int ppm_pivoter90(struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR], int *p_lignes, int *p_colonnes, int sens)
 {
 	int status = ERREUR;
+    int matriceTempR[MAX_HAUTEUR][MAX_LARGEUR],matriceTempG[MAX_HAUTEUR][MAX_LARGEUR],matriceTempB[MAX_HAUTEUR][MAX_LARGEUR];
+    int k = *p_colonnes,temp;
+    switch(sens)
+    {
+    default :
+        status = ERREUR;
+        break;
 
+    case SENS_ANTIHORAIRE:
 
+        for(int j = 0 ; j<*p_lignes; j++)
+        {
+            k = *p_lignes;
+            for(int n = 0; n< *p_colonnes; n++)
+            {
+                k--;
+                matriceTempR[k][j] = matrice[j][n].valeurR;
+                matriceTempG[k][j] = matrice[j][n].valeurG;
+                matriceTempB[k][j] = matrice[j][n].valeurB;
+            }
+        }
+         for(int j = 0; j<*p_lignes; j++)
+        {
+            for(int n = 0; n<*p_colonnes; n++)
+            {
+                matrice[n][j].valeurR = matriceTempR[n][j];
+                matrice[n][j].valeurG = matriceTempG[n][j];
+                matrice[n][j].valeurB = matriceTempB[n][j];
+
+            }
+        }
+         temp = *p_colonnes;
+        *p_colonnes = *p_lignes;
+        *p_lignes = temp;
+        status = OK;
+        break;
+
+    case SENS_HORAIRE:
+
+         for(int j = 0 ; j<*p_lignes; j++)
+        {
+            k--;
+            for(int n = 0; n< *p_colonnes; n++)
+            {
+                matriceTempR[n][k] = matrice[j][n].valeurR;
+                matriceTempG[n][k] = matrice[j][n].valeurG;
+                matriceTempB[n][k] = matrice[j][n].valeurB;
+            }
+        }
+         for(int j = 0; j<*p_lignes; j++)
+        {
+            for(int n = 0; n<*p_colonnes; n++)
+            {
+                matrice[n][j].valeurR = matriceTempR[n][j];
+                matrice[n][j].valeurG = matriceTempG[n][j];
+                matrice[n][j].valeurB = matriceTempB[n][j];
+
+            }
+        }
+         temp = *p_colonnes;
+        *p_colonnes = *p_lignes;
+        *p_lignes = temp;
+
+        status = OK;
+        break;
+    }
 	return status;
 }
 
