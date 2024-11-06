@@ -32,12 +32,12 @@ void PrintMatrix(int matrix[MAX_HAUTEUR][MAX_LARGEUR],int ligne, int col)
 
 int main()
 {
-    int lignes1, colonnes1;
-    int lignes2, colonnes2;
-    int maxval;
-    int histogramme[MAX_VALEUR+1];
-    char nom[MAX_CHAINE];
-    struct MetaData metadonnees;
+    int lignes1 = 0, colonnes1 = 0;
+    int lignes2 = 0, colonnes2 = 0;
+    int maxval = 0;
+    int histogramme[MAX_VALEUR+1] = {0};
+    char nom[MAX_CHAINE] = {0};
+    struct MetaData metadonnees = {0};;
 
 	int retour;
 
@@ -63,6 +63,13 @@ int main()
 
 
 		PrintMatrix(image1,lignes1,colonnes1);
+
+		pgm_copier(image1,lignes1,colonnes1,image2,&lignes2,&colonnes2);
+
+		pgm_ecrire("test2.txt", image2,
+					lignes2, colonnes2,
+					maxval, metadonnees);
+
 	}else if(retour == ERREUR_FICHIER)
 	{
 		printf("-> ERREUR_FICHIER");
@@ -73,12 +80,7 @@ int main()
 
 	printf("\n");
 
-	// autre exemple d'appel de fonction
-    pgm_ecrire("test1.txt", image1,
-               lignes1, colonnes1,
-               maxval, metadonnees);
-
-    printf("-> Fin!\n");
+    printf("-> Fin!\n Press enter to continue.");
 
 	char a;
    scanf("%c",&a);
