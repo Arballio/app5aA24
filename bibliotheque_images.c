@@ -312,65 +312,12 @@ int pgm_sont_identiques(int matrice1[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int
 	return status;
 }
 
+
 int pgm_pivoter90(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int *p_lignes, int *p_colonnes, int sens)
 {
 	int status = ERREUR;
-    int matriceTemp[MAX_HAUTEUR][MAX_LARGEUR];
-    int k = *p_colonnes;
-    switch(sens)
-    {
-    default :
-        status = ERREUR;
-        break;
 
-    case SENS_ANTIHORAIRE:
 
-        for(int j = 0; j<*p_lignes; j++)
-        {
-            for(int n = 0; n<*p_colonnes; n++)
-            {
-                matriceTemp[n][j] = matrice[j][n];
-
-            }
-        }
-
-        for(int j = 0; j<*p_lignes; j++)
-        {
-            for(int n = 0; n<*p_colonnes; n++)
-            {
-                matrice[n][j] = matriceTemp[n][j];
-
-            }
-        }
-        status = OK;
-        break;
-
-    case SENS_HORAIRE:
-
-         for(int j ; j<*p_lignes; j++)
-        {
-            k--;
-            for(int n = 0; n< *p_colonnes; n++)
-            {
-                matriceTemp[n][k] = matrice[j][n];
-            }
-        }
-         for(int j = 0; j<*p_lignes; j++)
-        {
-            for(int n = 0; n<*p_colonnes; n++)
-            {
-                matrice[n][j] = matriceTemp[n][j];
-
-            }
-        }
-        int temp;
-         temp = *p_colonnes;
-        *p_colonnes = *p_lignes;
-        *p_lignes = temp;
-
-        status = OK;
-        break;
-    }
 	return status;
 }
 
@@ -406,6 +353,7 @@ int ppm_sont_identiques(struct RGB matrice1[MAX_HAUTEUR][MAX_LARGEUR], int ligne
 int ppm_pivoter90(struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR], int *p_lignes, int *p_colonnes, int sens)
 {
 	int status = ERREUR;
+
 
 	return status;
 }
