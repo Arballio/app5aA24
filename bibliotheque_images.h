@@ -13,6 +13,8 @@ Description: Solution de la problematique pour GEN145.
 #define BIBLIOTHEQUE_IMAGES_H
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 // Valeurs maximales pour les images
 #define MAX_LARGEUR 256
@@ -37,7 +39,7 @@ Description: Solution de la problematique pour GEN145.
 
 struct MetaData{
     char auteur[MAX_CHAINE];
-    char dateCreation[MAX_CHAINE]; // yyyy-mm-dd 
+    char dateCreation[MAX_CHAINE]; // yyyy-mm-dd
     char lieuCreation[MAX_CHAINE];
 };
 
