@@ -43,14 +43,16 @@ int main()
 
     printf("-> Debut!\n");
 
-	//strcpy(nom,"Sherbrooke_Frontenac_nuit.pgm");
-	strcpy(nom,"testfile.pgm");
+	strcpy(nom,"Sherbrooke_Frontenac_nuit.pgm");
+
+	//strcpy(nom,"testfile.pgm");
 
     retour = pgm_lire(nom, image1,
                       &lignes1, &colonnes1,
                       &maxval, &metadonnees);
 
-	// exemple detraitement d'un code de retour (erreur ou reussite)
+
+
 	printf("-> Retour: ");
 
 	if (retour == OK){
@@ -62,13 +64,17 @@ int main()
 		printf("max value = %d",maxval);
 
 
-		PrintMatrix(image1,lignes1,colonnes1);
+		//PrintMatrix(image1,lignes1,colonnes1);
 
 		pgm_copier(image1,lignes1,colonnes1,image2,&lignes2,&colonnes2);
 
 		pgm_ecrire("test2.txt", image2,
 					lignes2, colonnes2,
 					maxval, metadonnees);
+
+		pgm_eclaircir_noircir(image1,lignes1,colonnes1,maxval,-1000);
+
+		pgm_ecrire("test.pgm",image1,lignes1,colonnes1,maxval,metadonnees);
 
 	}else if(retour == ERREUR_FICHIER)
 	{
