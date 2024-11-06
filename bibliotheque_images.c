@@ -127,6 +127,9 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
             {
 					temp[j] = tempbuffer[i];
 					j++;i++;
+
+					if(i>100)
+						break;
             }
 
 			i++;
@@ -166,27 +169,6 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 		}
 
 		memset(tempbuffer,0x30,sizeof(tempbuffer));
-
-        //V1
-		/*for(int R = 0;R<(*p_lignes);R++)
-			{
-				for(int L = 0;L<*p_colonnes;L++)
-				{
-					//tempbuffer[0] = fgetc(fp);
-
-					for(int i = 0; 0x29 <tempbuffer[i] && tempbuffer[i]<0x40 ;i++){
-						tempbuffer[i] = fgetc(fp);
-					}
-
-					fgetc(fp);
-
-					matrice[R][L] = atoi(tempbuffer);
-					memset(tempbuffer,0x30,sizeof(tempbuffer));
-				}
-			}*/
-
-
-	//status = OK;
 	}
 
 	fclose(fp);
@@ -289,7 +271,18 @@ int pgm_eclaircir_noircir(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int
 {
 	int status = ERREUR;
 
-	return status;
+	if(lignes == 0 || colonnes == 0){return status;}
+
+		for(int L = 0; L < lignes; L++)    // Augmenter l pendant que l est plus petit que la taille en lignes des matrices
+		{
+			//fprintf(fp,"\r");               //Imprimer le début d'une rangée
+
+			for(int C = 0; C< colonnes;C++)  // Augmenter c pendant que c est plus petit que la taille en colonnes des matrices
+			{
+				matrice[L][C] = ((matrice[L][C]+valeur)>maxval?maxval:(matrice[L][C]+valeur)<maxval?-255:matrice[L][C]+valeur);
+			}
+		}
+		return status;
 }
 
 int pgm_creer_negatif(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes, int maxval)//#TODO
@@ -362,7 +355,7 @@ int pgm_pivoter90(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int *p_lignes, int *p_c
 
     case SENS_HORAIRE:
 
-         for(int j ; j<*p_lignes; j++)
+         for(int j = 0 ; j<*p_lignes; j++)
         {
             k--;
             for(int n = 0; n< *p_colonnes; n++)
