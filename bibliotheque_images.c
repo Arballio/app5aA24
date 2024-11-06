@@ -123,7 +123,7 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 
 			int j = 0;
 
-			while(tempbuffer[i] != ' ' && tempbuffer[i] != '\n' && tempbuffer[i] != '\r')
+			while(tempbuffer[i] != ' ' && tempbuffer[i] != '\n' && tempbuffer[i] != '\r'&& tempbuffer[i] != '\0')
             {
 					temp[j] = tempbuffer[i];
 					j++;i++;
@@ -289,7 +289,18 @@ int pgm_creer_negatif(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int col
 {
 	int status = ERREUR;
 
-	return status;
+	if(lignes == 0 || colonnes == 0){return status;}
+
+		for(int L = 0; L < lignes; L++)    // Augmenter l pendant que l est plus petit que la taille en lignes des matrices
+		{
+			//fprintf(fp,"\r");               //Imprimer le début d'une rangée
+
+			for(int C = 0; C< colonnes;C++)  // Augmenter c pendant que c est plus petit que la taille en colonnes des matrices
+			{
+				matrice[L][C] = (maxval-matrice[L][C]);
+			}
+		}
+		return status;
 }
 
 int pgm_extraire(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int colonnes1, int lignes2, int colonnes2, int *p_lignes, int *p_colonnes)//#TODO

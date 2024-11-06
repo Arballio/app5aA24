@@ -8,3 +8,5 @@ App5a.layout
 *.o
 
 *.exe
+
+*.depend
