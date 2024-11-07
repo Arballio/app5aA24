@@ -332,18 +332,7 @@ int pgm_couleur_preponderante(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes,
 int pgm_eclaircir_noircir(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes, int maxval, int valeur)
 {
 	int status = ERREUR;
-    int matricedebug[MAX_HAUTEUR][MAX_LARGEUR];
-    for(int L = 0; L < lignes; L++)    // Augmenter l pendant que l est plus petit que la taille en lignes des matrices
-		{
-			//fprintf(fp,"\r");               //Imprimer le début d'une rangée
 
-			for(int C = 0; C< colonnes;C++)  // Augmenter c pendant que c est plus petit que la taille en colonnes des matrices
-			{
-			   matricedebug[L][C] = matrice[L][C];
-				//matrice[L][C] = ((matrice[L][C]+valeur)>maxval?maxval:(matrice[L][C]+valeur)<maxval?-255:matrice[L][C]+valeur);
-			}
-
-		}
 	if(lignes == 0 || colonnes == 0){return status;}
         status = OK;
 		for(int L = 0; L < lignes; L++)    // Augmenter l pendant que l est plus petit que la taille en lignes des matrices
@@ -363,7 +352,6 @@ int pgm_eclaircir_noircir(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int
                 else
                 {
                     matrice[L][C] = matrice[L][C]+valeur;
-                    matricedebug[L][C] =matrice[L][C];
                 }
 			}
 
@@ -376,7 +364,7 @@ int pgm_creer_negatif(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int col
 	int status = ERREUR;
 
 	if(lignes == 0 || colonnes == 0){return status;}
-
+    status = OK;
 		for(int L = 0; L < lignes; L++)    // Augmenter l pendant que l est plus petit que la taille en lignes des matrices
 		{
 			//fprintf(fp,"\r");               //Imprimer le début d'une rangée
@@ -446,9 +434,9 @@ int pgm_sont_identiques(int matrice1[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int
 
 int pgm_pivoter90(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int *p_lignes, int *p_colonnes, int sens)
 {
-int status = ERREUR;
+    int status = ERREUR;
     int matriceTemp[MAX_HAUTEUR][MAX_LARGEUR];
-    int k = *p_lignes,temp;
+    int k = *p_colonnes,temp;
     switch(sens)
     {
     default :
@@ -458,7 +446,7 @@ int status = ERREUR;
     case SENS_ANTIHORAIRE:
         for(int j = 0 ; j<*p_lignes; j++)
         {
-            k = *p_lignes;
+            k = *p_colonnes;
             for(int n = 0; n< *p_colonnes; n++)
             {
                 k--;
@@ -481,7 +469,7 @@ int status = ERREUR;
         break;
 
     case SENS_HORAIRE:
-
+        k = *p_lignes;
          for(int j = 0 ; j<*p_lignes; j++)
         {
             k--;
@@ -762,7 +750,7 @@ int ppm_pivoter90(struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR], int *p_lignes, i
 {
 	int status = ERREUR;
     int matriceTempR[MAX_HAUTEUR][MAX_LARGEUR],matriceTempG[MAX_HAUTEUR][MAX_LARGEUR],matriceTempB[MAX_HAUTEUR][MAX_LARGEUR];
-    int k = *p_colonnes,temp;
+    int k = *p_lignes,temp;
     switch(sens)
     {
     default :
@@ -773,7 +761,7 @@ int ppm_pivoter90(struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR], int *p_lignes, i
 
         for(int j = 0 ; j<*p_lignes; j++)
         {
-            k = *p_lignes;
+            k = *p_colonnes;
             for(int n = 0; n< *p_colonnes; n++)
             {
                 k--;
@@ -799,6 +787,10 @@ int ppm_pivoter90(struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR], int *p_lignes, i
         break;
 
     case SENS_HORAIRE:
+
+
+
+
 
          for(int j = 0 ; j<*p_lignes; j++)
         {
