@@ -305,9 +305,26 @@ int pgm_creer_histogramme(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int
 
 int pgm_couleur_preponderante(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes)
 {
-	int status = ERREUR;
+	int resultat = ERREUR, valeurComp;
+	int histogramme[MAX_VALEUR+1] = {0};
+	resultat = pgm_creer_histogramme(matrice,lignes,colonnes,histogramme);
 
-	return status;
+	if(resultat <= OK)
+    {
+         valeurComp = histogramme[0];
+        for(int i = 0; i < MAX_VALEUR+1; i++)
+        {
+            if(valeurComp<histogramme[i])
+            {
+                valeurComp = i;
+            }
+        }
+        resultat = valeurComp;
+    }
+    else
+        resultat == ERREUR;
+
+	return resultat;
 }
 
 int pgm_eclaircir_noircir(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes, int maxval, int valeur)
