@@ -12,7 +12,7 @@ Description: Fichier de distribution pour GEN145.
 
 int main()
 {
-	AutoValidation();
-	
+	//AutoValidation();
+    //test_pgm_eclaircir_noircir();
     return 0;
 }

@@ -305,7 +305,7 @@ int pgm_creer_histogramme(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int
 
 int pgm_couleur_preponderante(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes)
 {
-	int resultat = ERREUR, valeurComp;
+	int resultat = ERREUR, valeurComp,couleur;
 	int histogramme[MAX_VALEUR+1] = {0};
 	resultat = pgm_creer_histogramme(matrice,lignes,colonnes,histogramme);
 
@@ -316,10 +316,11 @@ int pgm_couleur_preponderante(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes,
         {
             if(valeurComp<histogramme[i])
             {
-                valeurComp = i;
+                valeurComp = histogramme[i];
+                couleur = i;
             }
         }
-        resultat = valeurComp;
+        resultat = couleur;
     }
     else{
         resultat = ERREUR;
@@ -331,17 +332,41 @@ int pgm_couleur_preponderante(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes,
 int pgm_eclaircir_noircir(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes, int maxval, int valeur)
 {
 	int status = ERREUR;
+    int matricedebug[MAX_HAUTEUR][MAX_LARGEUR];
+    for(int L = 0; L < lignes; L++)    // Augmenter l pendant que l est plus petit que la taille en lignes des matrices
+		{
+			//fprintf(fp,"\r");               //Imprimer le début d'une rangée
 
+			for(int C = 0; C< colonnes;C++)  // Augmenter c pendant que c est plus petit que la taille en colonnes des matrices
+			{
+			   matricedebug[L][C] = matrice[L][C];
+				//matrice[L][C] = ((matrice[L][C]+valeur)>maxval?maxval:(matrice[L][C]+valeur)<maxval?-255:matrice[L][C]+valeur);
+			}
+
+		}
 	if(lignes == 0 || colonnes == 0){return status;}
-
+        status = OK;
 		for(int L = 0; L < lignes; L++)    // Augmenter l pendant que l est plus petit que la taille en lignes des matrices
 		{
 			//fprintf(fp,"\r");               //Imprimer le début d'une rangée
 
 			for(int C = 0; C< colonnes;C++)  // Augmenter c pendant que c est plus petit que la taille en colonnes des matrices
 			{
-				matrice[L][C] = ((matrice[L][C]+valeur)>maxval?maxval:(matrice[L][C]+valeur)<maxval?-255:matrice[L][C]+valeur);
+			    if((matrice[L][C]+valeur)>=maxval)
+                {
+                     matrice[L][C] = maxval ;
+                }
+                else if((matrice[L][C]+valeur)<=0)
+                {
+                    matrice[L][C] = 0;
+                }
+                else
+                {
+                    matrice[L][C] = matrice[L][C]+valeur;
+                    matricedebug[L][C] =matrice[L][C];
+                }
 			}
+
 		}
 		return status;
 }
