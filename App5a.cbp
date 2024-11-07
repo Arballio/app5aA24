@@ -23,7 +23,6 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-Winit-self" />
-					<Add option="-fsanitize=undefined" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />

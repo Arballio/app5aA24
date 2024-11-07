@@ -30,7 +30,7 @@ int main()
 
     printf("-> Debut!\n");
 
-	strcpy(nom,"Sherbrooke_Frontenac_nuit.pgm");
+	/*strcpy(nom,"Sherbrooke_Frontenac_nuit.pgm");
 
 	//strcpy(nom,"testfile.pgm");
 
@@ -71,7 +71,45 @@ int main()
 	}else
 	{
 		printf("-> ERREUR");
+	}*/
+
+	/********************///Test pour ppm
+	strcpy(nom,"Sherbrooke_Frontenac_nuit.ppm");
+	//strcpy(nom,"testfile.ppm");
+
+	retour = ppm_lire(nom, imageRGB1,
+                      &lignes1, &colonnes1,
+                      &maxval, &metadonnees);
+
+		PrintRGBMatrix(imageRGB1,lignes1,colonnes1);
+
+
+	printf("-> Retour: ");
+
+	if (retour == OK){
+		printf("-> OK\n\r");
+		if((metadonnees.auteur[0]) != '\0'){
+			printf("Auteur = %s, Date = %s, Lieu = %s\n\r",
+                metadonnees.auteur,metadonnees.dateCreation,metadonnees.lieuCreation);}
+		printf("Line = %d, Colonne = %d\n\r",lignes1,colonnes1);
+		printf("max value = %d",maxval);
+
+		ppm_copier(imageRGB1,lignes1,colonnes1,imageRGB2,&lignes2,&colonnes2);
+
+		ppm_ecrire("test2.ppm", imageRGB2,
+					lignes2, colonnes2,
+					maxval, metadonnees);
+
+		ppm_ecrire("test.ppm",imageRGB1,lignes1,colonnes1,maxval,metadonnees);
+
+	}else if(retour == ERREUR_FICHIER)
+	{
+		printf("-> ERREUR_FICHIER");
+	}else
+	{
+		printf("-> ERREUR");
 	}
+	/************************/
 
 	printf("\n");
 

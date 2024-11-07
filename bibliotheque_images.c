@@ -44,13 +44,39 @@ void MetaParser(char *strIN,char *strOUT, int pos)
 void PrintMatrix(int matrix[MAX_HAUTEUR][MAX_LARGEUR],int ligne, int col)
 {
     printf("\n");
-    for(int i = 0; i <= ligne; i++)    // Augmenter i pendant que i est plus petit que la taille en n des matrices
+    for(int i = 0; i < ligne; i++)    // Augmenter i pendant que i est plus petit que la taille en n des matrices
     {
         printf("\r\t\[");               //Imprimer le début d'une rangée
 
-        for(int j = 0; j<= col;j++)  // Augmenter j pendant que j est plus petit que la taille en n des matrices
+        for(int j = 0; j< col;j++)  // Augmenter j pendant que j est plus petit que la taille en n des matrices
         {
            printf("%d, ",matrix[i][j]); //Imprimer l'élément de la matrice à la position i,j
+        }
+        printf("]\n");                  //Imprimer la fin de la rangée
+    }
+}
+
+void PrintRGBMatrix(struct RGB matrix[MAX_HAUTEUR][MAX_LARGEUR],int ligne, int col)
+{
+    printf("\n");
+    for(int i = 0; i < ligne; i++)    // Augmenter i pendant que i est plus petit que la taille en n des matrices
+    {
+        printf("\r\t\[");               //Imprimer le début d'une rangée
+
+        for(int j = 0,color = 0; j< col;)  // Augmenter j pendant que j est plus petit que la taille en n des matrices
+        {
+            //Imprimer l'élément de la matrice à la position i,j
+        if(color == 0){
+						printf("%d, ",matrix[i][j].valeurR);
+						color++;
+					}else if(color == 1){
+					printf("%d, ",matrix[i][j].valeurG);
+					color++;
+					}else{
+					printf("%d, ",matrix[i][j].valeurB);
+					color = 0;
+					j++;
+					}
         }
         printf("]\n");                  //Imprimer la fin de la rangée
     }
@@ -444,6 +470,152 @@ int ppm_lire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR], i
 {
 	int status = ERREUR;
 
+
+	char tempbuffer[MAX_HAUTEUR+MAX_HAUTEUR+MAX_HAUTEUR] = {0};
+
+	FILE *fp = fopen(nom_fichier, "r");
+	int meta = 0;
+
+	if (fp == NULL) {
+			fclose(fp);
+	   return ERREUR_FICHIER;
+	} else {
+		//Gestion metadata
+		while (meta < 3) {
+
+			if(fgets(tempbuffer, sizeof(tempbuffer), fp) == NULL){break;}
+
+			if(tempbuffer[0] == '#'){
+
+				MetaParser(tempbuffer,p_metadonnees->auteur,1);
+				MetaParser(tempbuffer,p_metadonnees->dateCreation,2);
+				MetaParser(tempbuffer,p_metadonnees->lieuCreation,3);
+				//L++;
+
+			} else if(tempbuffer[0] == 'P'){
+				if(tempbuffer[1] == '3')
+				{
+					//Fichier PGM ok
+				}else {return ERREUR_FORMAT;}
+
+				meta++;
+			}
+			else if(meta == 1){
+					char temp2[10] ={0};
+					int i = 0,j=0;
+
+					while(tempbuffer[i] != ' ' && tempbuffer[0] != '\n'){temp2[i] = tempbuffer[i];i++;}
+
+					i++;
+
+				*p_colonnes = atoi(temp2);
+				memset(temp2,0,sizeof(temp2));
+
+				while(tempbuffer[i] != ' ' && tempbuffer[i] != 0)
+				{
+					temp2[j++] = tempbuffer[i];
+					i++;
+
+					if(i>10000)break;
+				}
+				*p_lignes = atoi(temp2);
+
+				meta++;
+			}
+			else if(meta == 2)
+			{
+				*p_maxval = atoi(tempbuffer);
+				status = OK;
+				meta++;
+
+			}
+		memset(tempbuffer,0,sizeof(tempbuffer));
+		}
+
+		//Gestion tableau
+
+		//V2
+		int i = 0,L = 0,C = 0,color = 0;
+		char temp[20] = {0};
+
+		if(fgets(tempbuffer, sizeof(tempbuffer), fp) == NULL){
+
+		}
+		else{
+				while(1)
+			{
+
+
+			int j = 0;
+
+			while(tempbuffer[i] != ' ' && tempbuffer[i] != '\n' && tempbuffer[i] != '\r'&& tempbuffer[i] != '\0')
+            {
+					temp[j] = tempbuffer[i];
+					j++;i++;
+
+					if(i>100)
+						break;
+            }
+
+			i++;
+
+			if(tempbuffer[i]== '\n' || tempbuffer[i+1]== '\0' || tempbuffer[i]== '\r')
+				{
+					memset(tempbuffer,0,sizeof(tempbuffer));
+					fgets(tempbuffer, sizeof(tempbuffer), fp);
+					i = 0;
+				}
+
+			if(L < *p_lignes)
+			{
+				if(C<*p_colonnes){
+						if(color == 0){
+							matrice[L][C].valeurR = atoi(temp);
+							color++;
+						}else if(color == 1){
+						matrice[L][C].valeurG = atoi(temp);
+						color++;
+						}else{
+						matrice[L][C].valeurB = atoi(temp);
+						color = 0;
+						C++;
+						}
+				}else{
+					//C=0;
+					if(color == 0){
+							L++;
+						matrice[L][0].valeurR = atoi(temp);
+						color++;
+					}else if(color == 1){
+					matrice[L][0].valeurG = atoi(temp);
+					color++;
+					}else{
+					matrice[L][0].valeurB = atoi(temp);
+					color = 0;
+					C= 1;
+					}
+				}
+			}
+			else if(tempbuffer[i] == '\0')//Fin du fichier
+			{
+				return OK;
+			}
+			else
+			{
+					break;
+			}
+
+			memset(temp,0,sizeof(temp));
+
+
+			}
+		}
+
+		memset(tempbuffer,0x30,sizeof(tempbuffer));
+	}
+
+	fclose(fp);
+
 	return status;
 }
 
@@ -451,7 +623,48 @@ int ppm_ecrire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR],
 {
 	int status = ERREUR;
 
+	FILE *fp = fopen(nom_fichier, "w");
+
+	if (fp == NULL) {
+			fclose(fp);
+	   return ERREUR_FICHIER;
+	} else{
+		if((metadonnees.auteur[0]) != '\0'){
+			fprintf(fp,"%s %s %s\n",metadonnees.auteur,metadonnees.dateCreation,metadonnees.lieuCreation);
+		}
+		fprintf(fp,"P3\n");
+		fprintf(fp,"%d %d\n",colonnes,lignes);
+		fprintf(fp,"%d\n",maxval);
+
+		for(int L = 0,color = 0; L < lignes; L++)    // Augmenter l pendant que l est plus petit que la taille en lignes des matrices
+		{
+			//fprintf(fp,"\r");               //Imprimer le début d'une rangée
+
+			for(int C = 0; C< colonnes;)  // Augmenter c pendant que c est plus petit que la taille en colonnes des matrices
+			{
+			   if(color == 0){
+						fprintf(fp,"%d ",matrice[L][C].valeurR ); //Imprimer l'élément de la matrice à la position l,c couleur R
+						color++;
+					}else if(color == 1){
+					fprintf(fp,"%d ",matrice[L][C].valeurG ); //Imprimer l'élément de la matrice à la position l,c couleur G
+					color++;
+					}else{
+					fprintf(fp,"%d ",matrice[L][C].valeurB ); //Imprimer l'élément de la matrice à la position l,c couleur B
+					color = 0;
+					C++;
+					}
+			}
+			fprintf(fp,"\n");                  //Imprimer la fin de la rangée
+		}
+	}
+
+
+	fclose(fp);
+
+	status = OK;
+
 	return status;
+
 }
 
 int ppm_copier(struct RGB matrice1[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int colonnes1, struct RGB matrice2[MAX_HAUTEUR][MAX_LARGEUR], int *p_lignes2, int *p_colonnes2)

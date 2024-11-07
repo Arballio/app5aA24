@@ -71,5 +71,5 @@ int ppm_pivoter90(struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR], int *p_lignes, i
 
 //Random
 void PrintMatrix(int matrix[MAX_HAUTEUR][MAX_LARGEUR],int ligne, int col);
-
+void PrintRGBMatrix(struct RGB matrix[MAX_HAUTEUR][MAX_LARGEUR],int ligne, int col);
 #endif
