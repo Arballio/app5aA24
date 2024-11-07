@@ -264,6 +264,7 @@ int pgm_couleur_preponderante(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes,
 {
 	int status = ERREUR;
 
+
 	return status;
 }
 
