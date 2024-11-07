@@ -321,8 +321,9 @@ int pgm_couleur_preponderante(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes,
         }
         resultat = valeurComp;
     }
-    else
-        resultat == ERREUR;
+    else{
+        resultat = ERREUR;
+    }
 
 	return resultat;
 }

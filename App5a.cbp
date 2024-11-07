@@ -32,6 +32,9 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Linker>
+			<Add option="-L. -lAutoValidation" />
+		</Linker>
 		<Unit filename="bibliotheque_images.c">
 			<Option compilerVar="CC" />
 		</Unit>
