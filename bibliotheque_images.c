@@ -40,6 +40,23 @@ void MetaParser(char *strIN,char *strOUT, int pos)
 /********************************************************************/
 //						Fonction publique
 /********************************************************************/
+
+void PrintMatrix(int matrix[MAX_HAUTEUR][MAX_LARGEUR],int ligne, int col)
+{
+    printf("\n");
+    for(int i = 0; i <= ligne; i++)    // Augmenter i pendant que i est plus petit que la taille en n des matrices
+    {
+        printf("\r\t\[");               //Imprimer le début d'une rangée
+
+        for(int j = 0; j<= col;j++)  // Augmenter j pendant que j est plus petit que la taille en n des matrices
+        {
+           printf("%d, ",matrix[i][j]); //Imprimer l'élément de la matrice à la position i,j
+        }
+        printf("]\n");                  //Imprimer la fin de la rangée
+    }
+}
+
+
 int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 			 int *p_lignes, int *p_colonnes,
 			 int *p_maxval, struct MetaData *p_metadonnees)
@@ -83,7 +100,7 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 
 					i++;
 
-				*p_lignes = atoi(temp2);
+				*p_colonnes = atoi(temp2);
 				memset(temp2,0,sizeof(temp2));
 
 				while(tempbuffer[i] != ' ' && tempbuffer[i] != 0)
@@ -93,7 +110,7 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 
 					if(i>10000)break;
 				}
-				*p_colonnes = atoi(temp2);
+				*p_lignes = atoi(temp2);
 
 				meta++;
 			}
@@ -123,7 +140,7 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 
 			int j = 0;
 
-			while(tempbuffer[i] != ' ' && tempbuffer[i] != '\n' && tempbuffer[i] != '\r')
+			while(tempbuffer[i] != ' ' && tempbuffer[i] != '\n' && tempbuffer[i] != '\r'&& tempbuffer[i] != '\0')
             {
 					temp[j] = tempbuffer[i];
 					j++;i++;
@@ -192,7 +209,7 @@ int pgm_ecrire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 			fprintf(fp,"%s %s %s\n",metadonnees.auteur,metadonnees.dateCreation,metadonnees.lieuCreation);
 		}
 		fprintf(fp,"P2\n");
-		fprintf(fp,"%d %d\n",lignes,colonnes);
+		fprintf(fp,"%d %d\n",colonnes,lignes);
 		fprintf(fp,"%d\n",maxval);
 
 		for(int L = 0; L < lignes; L++)    // Augmenter l pendant que l est plus petit que la taille en lignes des matrices
@@ -268,7 +285,7 @@ int pgm_couleur_preponderante(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes,
 	return status;
 }
 
-int pgm_eclaircir_noircir(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes, int maxval, int valeur)//#TODO
+int pgm_eclaircir_noircir(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes, int maxval, int valeur)
 {
 	int status = ERREUR;
 
@@ -286,18 +303,55 @@ int pgm_eclaircir_noircir(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int
 		return status;
 }
 
-int pgm_creer_negatif(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes, int maxval)//#TODO
+int pgm_creer_negatif(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes, int maxval)
 {
 	int status = ERREUR;
 
-	return status;
+	if(lignes == 0 || colonnes == 0){return status;}
+
+		for(int L = 0; L < lignes; L++)    // Augmenter l pendant que l est plus petit que la taille en lignes des matrices
+		{
+			//fprintf(fp,"\r");               //Imprimer le début d'une rangée
+
+			for(int C = 0; C< colonnes;C++)  // Augmenter c pendant que c est plus petit que la taille en colonnes des matrices
+			{
+				matrice[L][C] = (maxval-matrice[L][C]);
+			}
+		}
+		return status;
 }
 
-int pgm_extraire(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int colonnes1, int lignes2, int colonnes2, int *p_lignes, int *p_colonnes)//#TODO
+int pgm_extraire(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int colonnes1, int lignes2, int colonnes2, int *p_lignes, int *p_colonnes)
 {
 	int status = ERREUR;
 
-	return status;
+	int TempMat[MAX_HAUTEUR][MAX_LARGEUR] = {{0}};
+
+	if(lignes1 < 0 || colonnes1 < 0 ||lignes1 > lignes2 || colonnes1 > colonnes2){return status;}
+
+		for(int L = lignes1,n=0; L <= lignes2; L++,n++)    // Augmenter l pendant que l est plus petit que la taille en lignes des matrices
+		{
+			//fprintf(fp,"\r");               //Imprimer le début d'une rangée
+
+			for(int C = colonnes1,j=0; C<= colonnes2;C++,j++)  // Augmenter c pendant que c est plus petit que la taille en colonnes des matrices
+			{
+				TempMat[n][j] = matrice[L][C];
+			}
+		}
+
+		PrintMatrix(matrice,lignes2, colonnes2);
+
+		*p_lignes = (lignes2-lignes1+1);
+		*p_colonnes = (colonnes2-colonnes1+1);
+
+		PrintMatrix(TempMat,lignes2,colonnes2);
+		status = OK;
+	memset(matrice,0,sizeof(int)*(MAX_HAUTEUR)*(MAX_LARGEUR));
+	PrintMatrix(matrice,lignes2, colonnes2);
+
+	memcpy(matrice,TempMat,sizeof(int)*(MAX_HAUTEUR)*(MAX_LARGEUR));
+	PrintMatrix(matrice,lignes2, colonnes2);
+		return status;
 }
 
 int pgm_sont_identiques(int matrice1[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int colonnes1, int matrice2[MAX_HAUTEUR][MAX_LARGEUR], int lignes2, int colonnes2)

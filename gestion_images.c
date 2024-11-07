@@ -14,20 +14,7 @@ int image2[MAX_HAUTEUR][MAX_LARGEUR];
 struct RGB imageRGB1[MAX_HAUTEUR][MAX_LARGEUR];
 struct RGB imageRGB2[MAX_HAUTEUR][MAX_LARGEUR];
 
-void PrintMatrix(int matrix[MAX_HAUTEUR][MAX_LARGEUR],int ligne, int col)
-{
-    printf("\n");
-    for(int i = 0; i < ligne; i++)    // Augmenter i pendant que i est plus petit que la taille en n des matrices
-    {
-        printf("\r\t\[");               //Imprimer le début d'une rangée
 
-        for(int j = 0; j< col;j++)  // Augmenter j pendant que j est plus petit que la taille en n des matrices
-        {
-           printf("%d, ",matrix[i][j]); //Imprimer l'élément de la matrice à la position i,j
-        }
-        printf("]\n");                  //Imprimer la fin de la rangée
-    }
-}
 
 
 int main()
@@ -68,11 +55,13 @@ int main()
 
 		pgm_copier(image1,lignes1,colonnes1,image2,&lignes2,&colonnes2);
 
-		pgm_ecrire("test2.txt", image2,
+		pgm_ecrire("test2.pgm", image2,
 					lignes2, colonnes2,
 					maxval, metadonnees);
 
-		pgm_eclaircir_noircir(image1,lignes1,colonnes1,maxval,-1000);
+		//pgm_eclaircir_noircir(image1,lignes1,colonnes1,maxval,-1000);
+
+		pgm_extraire(image1,0,0,9,9,&lignes1,&colonnes1);
 
 		pgm_ecrire("test.pgm",image1,lignes1,colonnes1,maxval,metadonnees);
 
