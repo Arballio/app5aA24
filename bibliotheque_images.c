@@ -132,7 +132,7 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 					if(status < 0)return status;
 
 			} else if(tempbuffer[0] == 'P'){
-				if(tempbuffer[1] == '2')
+				if(strcmp(tempbuffer,"P2\n")==0)
 				{
 					//Fichier PGM ok
 				}else {return ERREUR_FORMAT;}
@@ -561,7 +561,7 @@ int ppm_lire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR], i
 				//L++;
 
 			} else if(tempbuffer[0] == 'P'){
-				if(tempbuffer[1] == '3')
+				if(strcmp(tempbuffer,"P3\n")==0)
 				{
 					//Fichier PGM ok
 				}else {return ERREUR_FORMAT;}
