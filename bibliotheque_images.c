@@ -428,30 +428,30 @@ int pgm_extraire(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int colonne
 
 	int TempMat[MAX_HAUTEUR][MAX_LARGEUR] = {{0}};
 
-	if(lignes1 < 0 || colonnes1 < 0 ||lignes1 > lignes2 || colonnes1 > colonnes2){return status;}
+	if(lignes1 < 0 || colonnes1 < 0 ||lignes1 > lignes2 || colonnes1 > colonnes2 || colonnes1 >= MAX_HAUTEUR
+		|| lignes1 >= MAX_HAUTEUR || colonnes2 >= MAX_HAUTEUR || lignes2 >= MAX_HAUTEUR || colonnes1 >= *p_colonnes|| lignes1 >= *p_lignes
+		|| colonnes2 >= *p_colonnes|| lignes2 >= *p_lignes){return status;}
 
 		for(int L = lignes1,n=0; L <= lignes2; L++,n++)    // Augmenter l pendant que l est plus petit que la taille en lignes des matrices
 		{
-			//fprintf(fp,"\r");               //Imprimer le début d'une rangée
-
 			for(int C = colonnes1,j=0; C<= colonnes2;C++,j++)  // Augmenter c pendant que c est plus petit que la taille en colonnes des matrices
 			{
 				TempMat[n][j] = matrice[L][C];
 			}
 		}
 
-		PrintMatrix(matrice,lignes2, colonnes2);
+		//PrintMatrix(matrice,lignes2, colonnes2);
 
 		*p_lignes = (lignes2-lignes1+1);
 		*p_colonnes = (colonnes2-colonnes1+1);
 
-		PrintMatrix(TempMat,lignes2,colonnes2);
+		//PrintMatrix(TempMat,lignes2,colonnes2);
 		status = OK;
 	memset(matrice,0,sizeof(int)*(MAX_HAUTEUR)*(MAX_LARGEUR));
-	PrintMatrix(matrice,lignes2, colonnes2);
+	//PrintMatrix(matrice,lignes2, colonnes2);
 
 	memcpy(matrice,TempMat,sizeof(int)*(MAX_HAUTEUR)*(MAX_LARGEUR));
-	PrintMatrix(matrice,lignes2, colonnes2);
+	//PrintMatrix(matrice,lignes2, colonnes2);
 		return status;
 }
 
@@ -551,6 +551,10 @@ int ppm_lire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR], i
 	FILE *fp = fopen(nom_fichier, "r");
 	int meta = 0;
 
+	memset(p_metadonnees->auteur,0,sizeof(p_metadonnees->auteur));
+	memset(p_metadonnees->dateCreation,0,sizeof(p_metadonnees->dateCreation));
+	memset(p_metadonnees->lieuCreation,0,sizeof(p_metadonnees->lieuCreation));
+
 	if (fp == NULL) {
 			fclose(fp);
 	   return ERREUR_FICHIER;
@@ -562,9 +566,12 @@ int ppm_lire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR], i
 
 			if(tempbuffer[0] == '#'){
 
-				MetaParser(tempbuffer,p_metadonnees->auteur,1);
-				MetaParser(tempbuffer,p_metadonnees->dateCreation,2);
-				MetaParser(tempbuffer,p_metadonnees->lieuCreation,3);
+				status = MetaParser(tempbuffer,p_metadonnees->auteur,0);
+					if(status < 0)return status;
+				status = MetaParser(tempbuffer,p_metadonnees->dateCreation,1);
+					if(status < 0)return status;
+				status = MetaParser(tempbuffer,p_metadonnees->lieuCreation,2);
+					if(status < 0)return status;
 				//L++;
 
 			} else if(tempbuffer[0] == 'P'){
@@ -602,11 +609,18 @@ int ppm_lire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR], i
 				*p_maxval = atoi(tempbuffer);
 				status = OK;
 				meta++;
-
+			}
+			else{
+				return ERREUR_FORMAT;
 			}
 		memset(tempbuffer,0,sizeof(tempbuffer));
 		}
 
+
+		if(*p_colonnes > MAX_LARGEUR || *p_lignes > MAX_HAUTEUR)
+		{
+		 return ERREUR_TAILLE;
+		}
 		//Gestion tableau
 
 		//V2
@@ -705,18 +719,24 @@ int ppm_ecrire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR],
 	   return ERREUR_FICHIER;
 	} else{
 		if((metadonnees.auteur[0]) != '\0'){
-			fprintf(fp,"%s %s %s\n",metadonnees.auteur,metadonnees.dateCreation,metadonnees.lieuCreation);
+			fprintf(fp,"#%s;%s;%s\n",metadonnees.auteur,metadonnees.dateCreation,metadonnees.lieuCreation);
 		}
 		fprintf(fp,"P3\n");
 		fprintf(fp,"%d %d\n",colonnes,lignes);
 		fprintf(fp,"%d\n",maxval);
 
-		for(int L = 0,color = 0; L < lignes; L++)    // Augmenter l pendant que l est plus petit que la taille en lignes des matrices
+		for(int L = 0,color = 0,LigneMax = 0; L < lignes; L++)    // Augmenter l pendant que l est plus petit que la taille en lignes des matrices
 		{
 			//fprintf(fp,"\r");               //Imprimer le début d'une rangée
 
 			for(int C = 0; C< colonnes;)  // Augmenter c pendant que c est plus petit que la taille en colonnes des matrices
 			{
+				if((LigneMax>21))
+				{
+					fprintf(fp,"\n");                  //Imprimer la fin de la rangée
+					LigneMax = 0;
+				}
+
 			   if(color == 0){
 						fprintf(fp,"%d ",matrice[L][C].valeurR ); //Imprimer l'élément de la matrice à la position l,c couleur R
 						color++;
@@ -728,6 +748,8 @@ int ppm_ecrire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR],
 					color = 0;
 					C++;
 					}
+
+					LigneMax++;
 			}
 			fprintf(fp,"\n");                  //Imprimer la fin de la rangée
 		}

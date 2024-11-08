@@ -35,6 +35,7 @@
 		<Linker>
 			<Add option="-L. -lAutoValidation" />
 		</Linker>
+		<Unit filename="AutoValidation.h" />
 		<Unit filename="bibliotheque_images.c">
 			<Option compilerVar="CC" />
 		</Unit>
