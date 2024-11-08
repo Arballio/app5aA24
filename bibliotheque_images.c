@@ -14,25 +14,35 @@ Description: Fichier de distribution pour GEN145.
 /********************************************************************/
 
 //Cette fontion retire le premier token des metadatas. Commence a 0
-void MetaParser(char *strIN,char *strOUT, int pos)
+int MetaParser(char *strIN,char *strOUT, int pos)
 {
+	//memset(strOUT,0,sizeof(*strOUT));
+
 	int i = 0;
 
 	while(pos != 0)
 	{
-		while(strIN[i] != ';'){i++;}
+		do{i++;}while(strIN[i] != ';');
 
 			pos--;
 	}
 
-	while(strIN[i] != 0 && strIN[i] !=';')
+	i++;
+	int j =0;
+	while(strIN[i] != 0 && strIN[i] !=';' &&strIN[i] !='\n')
 	{
-		int j =0;
-
 			strOUT[j] = strIN[i++]; j++;
 
 	}
+	//printf("\n\n%s, %d, %s ",strIN,pos,strOUT);
 
+	if(strOUT[0] == 0)
+	{
+		return ERREUR_FORMAT;
+	}
+	else{
+		return OK;
+	}
 }
 
 
@@ -44,16 +54,23 @@ void MetaParser(char *strIN,char *strOUT, int pos)
 void PrintMatrix(int matrix[MAX_HAUTEUR][MAX_LARGEUR],int ligne, int col)
 {
     printf("\n");
-    for(int i = 0; i < ligne; i++)    // Augmenter i pendant que i est plus petit que la taille en n des matrices
+    for(int i = 0,LigneMax = 0; i < ligne; i++)    // Augmenter i pendant que i est plus petit que la taille en n des matrices
     {
-        printf("\r\t\[");               //Imprimer le début d'une rangée
+        //printf("\r\t\[");               //Imprimer le début d'une rangée
 
         for(int j = 0; j< col;j++)  // Augmenter j pendant que j est plus petit que la taille en n des matrices
         {
+        	if((LigneMax>21))
+				{
+					printf("]\n[");                  //Imprimer la fin de la rangée
+					LigneMax = 0;
+				}
            printf("%d, ",matrix[i][j]); //Imprimer l'élément de la matrice à la position i,j
+			LigneMax++;
         }
-        printf("]\n");                  //Imprimer la fin de la rangée
     }
+    printf("\n");
+
 }
 
 void PrintRGBMatrix(struct RGB matrix[MAX_HAUTEUR][MAX_LARGEUR],int ligne, int col)
@@ -94,6 +111,10 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 	FILE *fp = fopen(nom_fichier, "r");
 	int meta = 0;
 
+	memset(p_metadonnees->auteur,0,sizeof(p_metadonnees->auteur));
+	memset(p_metadonnees->dateCreation,0,sizeof(p_metadonnees->dateCreation));
+	memset(p_metadonnees->lieuCreation,0,sizeof(p_metadonnees->lieuCreation));
+
 	if (fp == NULL) {
 			fclose(fp);
 	   return ERREUR_FICHIER;
@@ -105,10 +126,12 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 
 			if(tempbuffer[0] == '#'){
 
-				MetaParser(tempbuffer,p_metadonnees->auteur,1);
-				MetaParser(tempbuffer,p_metadonnees->dateCreation,2);
-				MetaParser(tempbuffer,p_metadonnees->lieuCreation,3);
-				//L++;
+				status = MetaParser(tempbuffer,p_metadonnees->auteur,0);
+					if(status < 0)return status;
+				status = MetaParser(tempbuffer,p_metadonnees->dateCreation,1);
+					if(status < 0)return status;
+				status = MetaParser(tempbuffer,p_metadonnees->lieuCreation,2);
+					if(status < 0)return status;
 
 			} else if(tempbuffer[0] == 'P'){
 				if(tempbuffer[1] == '2')
@@ -147,8 +170,18 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 				meta++;
 
 			}
+			else{
+				return ERREUR_FORMAT;
+			}
 		memset(tempbuffer,0,sizeof(tempbuffer));
 		}
+
+
+		if(*p_colonnes > MAX_LARGEUR || *p_lignes > MAX_HAUTEUR)
+		{
+		 return ERREUR_TAILLE;
+		}
+
 
 		//Gestion tableau
 
@@ -171,13 +204,13 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 					temp[j] = tempbuffer[i];
 					j++;i++;
 
-					if(i>100)
-						break;
+					/*if(i>100)
+						break;*/
             }
 
 			i++;
 
-			if(tempbuffer[i]== '\n' || tempbuffer[i+1]== '\n' || tempbuffer[i]== '\r')
+			if(tempbuffer[i]== '\n' || tempbuffer[i]== '\0' || tempbuffer[i]== '\r')
 				{
 					memset(tempbuffer,0,sizeof(tempbuffer));
 					fgets(tempbuffer, sizeof(tempbuffer), fp);
@@ -198,6 +231,7 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 			}
 			else if(tempbuffer[i] == '\0')//Fin du fichier
 			{
+				fclose(fp);
 				return OK;
 			}
 			else
@@ -213,6 +247,8 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 
 		memset(tempbuffer,0x30,sizeof(tempbuffer));
 	}
+
+	//PrintMatrix(matrice,*p_lignes,*p_colonnes);
 
 	fclose(fp);
 
@@ -232,21 +268,30 @@ int pgm_ecrire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 	   return ERREUR_FICHIER;
 	} else{
 		if((metadonnees.auteur[0]) != '\0'){
-			fprintf(fp,"%s %s %s\n",metadonnees.auteur,metadonnees.dateCreation,metadonnees.lieuCreation);
+			fprintf(fp,"#%s;%s;%s\n",metadonnees.auteur,metadonnees.dateCreation,metadonnees.lieuCreation);
 		}
 		fprintf(fp,"P2\n");
 		fprintf(fp,"%d %d\n",colonnes,lignes);
 		fprintf(fp,"%d\n",maxval);
 
-		for(int L = 0; L < lignes; L++)    // Augmenter l pendant que l est plus petit que la taille en lignes des matrices
+		for(int L = 0,LigneMax = 0; L < lignes; L++)    // Augmenter l pendant que l est plus petit que la taille en lignes des matrices
 		{
 			//fprintf(fp,"\r");               //Imprimer le début d'une rangée
 
 			for(int C = 0; C< colonnes;C++)  // Augmenter c pendant que c est plus petit que la taille en colonnes des matrices
 			{
-			   fprintf(fp,"%d ",matrice[L][C]); //Imprimer l'élément de la matrice à la position l,c
+				if((LigneMax>21))
+				{
+					fprintf(fp,"\n");                  //Imprimer la fin de la rangée
+					LigneMax = 0;
+				}
+
+				fprintf(fp,"%d ",matrice[L][C]); //Imprimer l'élément de la matrice à la position l,c
+
+				LigneMax++;
+
 			}
-			fprintf(fp,"\n");                  //Imprimer la fin de la rangée
+			//fprintf(fp,"\n");
 		}
 	}
 
