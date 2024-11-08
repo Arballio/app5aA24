@@ -19,7 +19,7 @@ struct RGB imageRGB2[MAX_HAUTEUR][MAX_LARGEUR];
 int main()
 {
 	#if !(SELFTEST)
-	//test_ppm_ecrire();
+	//test_ppm_lire();
 	AutoValidation();
 	//test_pgm_ecrire();
 	//test_pgm_lire();

@@ -16,13 +16,13 @@ Description: Fichier de distribution pour GEN145.
 //Cette fontion retire le premier token des metadatas. Commence a 0
 int MetaParser(char *strIN,char *strOUT, int pos)
 {
-	//memset(strOUT,0,sizeof(*strOUT));
+	//memset(strOUT,0,sizeof(1024*8));
 
 	int i = 0;
 
 	while(pos != 0)
 	{
-		do{i++;}while(strIN[i] != ';');
+		do{i++;}while(strIN[i] != ';' && strIN[i] != '\0');
 
 			pos--;
 	}
@@ -34,6 +34,8 @@ int MetaParser(char *strIN,char *strOUT, int pos)
 			strOUT[j] = strIN[i++]; j++;
 
 	}
+
+	strOUT[++j] = 0;
 	//printf("\n\n%s, %d, %s ",strIN,pos,strOUT);
 
 	if(strOUT[0] == 0)
@@ -530,9 +532,10 @@ int ppm_lire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR], i
 
 
 	char tempbuffer[MAX_HAUTEUR+MAX_HAUTEUR+MAX_HAUTEUR] = {0};
+	int meta = 0;
+
 
 	FILE *fp = fopen(nom_fichier, "r");
-	int meta = 0;
 
 	memset(p_metadonnees->auteur,0,sizeof(p_metadonnees->auteur));
 	memset(p_metadonnees->dateCreation,0,sizeof(p_metadonnees->dateCreation));
