@@ -283,17 +283,17 @@ int pgm_creer_histogramme(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int
 {
     int status = ERREUR;
     //int k = 0;
-    for(int i = 0; i <= MAX_VALEUR;i++)
+    for(int i = 0; i <= MAX_VALEUR;i++)     //Parcourir toutes les valeurs possible d'un pixel
     {
-        for(int j = 0; j<lignes; j++)
+        for(int j = 0; j<lignes; j++)           //Parcourir toutes les valeurs possible d'une ligne
         {
-            for(int n = 0; n<colonnes; n++)
+            for(int n = 0; n<colonnes; n++)     //Parcourir toutes les valeurs possible d'une colonne
             {
                 int m = matrice[n][j];
 
                 if(m == i)
                 {
-                    histogramme[i] += 1;
+                    histogramme[i] += 1;    //Augmenter la valeur du tableau histogramme lorsque i est égal
                 }
             }
         }
@@ -309,12 +309,12 @@ int pgm_couleur_preponderante(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes,
 	int histogramme[MAX_VALEUR+1] = {0};
 	resultat = pgm_creer_histogramme(matrice,lignes,colonnes,histogramme);
 
-	if(resultat <= OK)
+	if(resultat <= 0)   //si l'histogramme ne retourne pas d'erreur
     {
          valeurComp = histogramme[0];
-        for(int i = 0; i < MAX_VALEUR+1; i++)
+        for(int i = 0; i < MAX_VALEUR+1; i++) //Parcourir toutes les valeurs possible d'un
         {
-            if(valeurComp<histogramme[i])
+            if(valeurComp<histogramme[i])       //Comparer la valeur précédente la plus élevée avec la valeur de l'histograme[i]
             {
                 valeurComp = histogramme[i];
                 couleur = i;
@@ -343,15 +343,15 @@ int pgm_eclaircir_noircir(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int
 			{
 			    if((matrice[L][C]+valeur)>=maxval)
                 {
-                     matrice[L][C] = maxval ;
+                     matrice[L][C] = maxval ;       //Pixel est égal a la valeur max si le résultat est plus grand que valeurmax
                 }
                 else if((matrice[L][C]+valeur)<=0)
                 {
-                    matrice[L][C] = 0;
+                    matrice[L][C] = 0;                 //Pixel est égal a 0x si le résultat est plus petit que valeurmax
                 }
                 else
                 {
-                    matrice[L][C] = matrice[L][C]+valeur;
+                    matrice[L][C] = matrice[L][C]+valeur;   //Pixel est égal a la valeur initiale du pixel + valeur
                 }
 			}
 
@@ -413,15 +413,15 @@ int pgm_extraire(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int colonne
 int pgm_sont_identiques(int matrice1[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int colonnes1, int matrice2[MAX_HAUTEUR][MAX_LARGEUR], int lignes2, int colonnes2)
 {
 	int status = DIFFERENTES;
-	if((lignes1 == lignes2) && (colonnes1 == colonnes2))
+	if((lignes1 == lignes2) && (colonnes1 == colonnes2))//si la taille des deux matrices sont identiques
     {
-        for(int j = 0; j < lignes1; j++)
+        for(int j = 0; j < lignes1; j++)    // Augmenter j pendant que j est plus petit que la taille en lignes des matrices
         {
-            for(int n = 0; n < colonnes2; n++)
+            for(int n = 0; n < colonnes2; n++)// Augmenter n pendant que n est plus petit que la taille en colonnes des matrices
             {
                 if(matrice1[n][j] != matrice2[n][j])
                 {
-                    return status;
+                    return status;      //Arrêter la boucle et retourner DIFFERENTES si la valeur n'est pas identique
                 }
             }
         }
@@ -440,54 +440,53 @@ int pgm_pivoter90(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int *p_lignes, int *p_c
     switch(sens)
     {
     default :
-        status = ERREUR;
+        status = ERREUR;    //Si le sens n'est pas bon
         break;
 
-    case SENS_ANTIHORAIRE:
-        for(int j = 0 ; j<*p_lignes; j++)
+    case SENS_ANTIHORAIRE:      // si le sens est antihoraire
+        for(int j = 0 ; j<*p_lignes; j++)   // Augmenter j pendant que j est plus petit que la taille en lignes des matrices
         {
             k = *p_colonnes;
-            for(int n = 0; n< *p_colonnes; n++)
+            for(int n = 0; n< *p_colonnes; n++) // Augmenter n pendant que n est plus petit que la taille en colonnes des matrices
             {
                 k--;
                 matriceTemp[k][j] = matrice[j][n];
             }
         }
-         for(int j = 0; j<*p_lignes; j++)
+         for(int j = 0; j<*p_lignes; j++)     // Augmenter j pendant que j est plus petit que la taille en lignes des matrices
         {
-            for(int n = 0; n<*p_colonnes; n++)
+            for(int n = 0; n<*p_colonnes; n++)// Augmenter n pendant que n est plus petit que la taille en colonnes des matrices
             {
-                matrice[n][j] = matriceTemp[n][j];
+                matrice[n][j] = matriceTemp[n][j]; //transferer la matrice tournée dans la matrice
 
             }
         }
         temp = *p_colonnes;
-        *p_colonnes = *p_lignes;
+        *p_colonnes = *p_lignes; //Modifier la taille des colonnes et des lignes
         *p_lignes = temp;
-        status = OK;
         status = OK;
         break;
 
-    case SENS_HORAIRE:
+    case SENS_HORAIRE:  // si le sens est horaire
         k = *p_lignes;
-         for(int j = 0 ; j<*p_lignes; j++)
+         for(int j = 0 ; j<*p_lignes; j++)   // Augmenter j pendant que j est plus petit que la taille en lignes des matrices
         {
             k--;
-            for(int n = 0; n< *p_colonnes; n++)
+            for(int n = 0; n< *p_colonnes; n++)// Augmenter n pendant que n est plus petit que la taille en colonnes des matrices
             {
                 matriceTemp[n][k] = matrice[j][n];
             }
         }
-         for(int j = 0; j<*p_lignes; j++)
+         for(int j = 0; j<*p_lignes; j++)     // Augmenter j pendant que j est plus petit que la taille en lignes des matrices
         {
-            for(int n = 0; n<*p_colonnes; n++)
+            for(int n = 0; n<*p_colonnes; n++)// Augmenter n pendant que n est plus petit que la taille en colonnes des matrices
             {
-                matrice[n][j] = matriceTemp[n][j];
+                matrice[n][j] = matriceTemp[n][j];  //transferer la matrice tournée dans la matrice
 
             }
         }
          temp = *p_colonnes;
-        *p_colonnes = *p_lignes;
+        *p_colonnes = *p_lignes;    //Modifier la taille des colonnes et des lignes
         *p_lignes = temp;
 
         status = OK;
@@ -716,7 +715,7 @@ int ppm_copier(struct RGB matrice1[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int c
                 for(int C = 0; C< colonnes1;C++)  // Augmenter c pendant que c est plus petit que la taille en colonnes des matrices
                 {
                     matrice2[L][C].valeurR = matrice1[L][C].valeurR;
-                    matrice2[L][C].valeurG = matrice1[L][C].valeurG;
+                    matrice2[L][C].valeurG = matrice1[L][C].valeurG; //mettre la valeur du pixel de la matrice1 dans l'emplacement correspondant de la matrice2
                     matrice2[L][C].valeurB = matrice1[L][C].valeurB;
                 }
             }
@@ -727,21 +726,21 @@ int ppm_copier(struct RGB matrice1[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int c
 int ppm_sont_identiques(struct RGB matrice1[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, int colonnes1, struct RGB matrice2[MAX_HAUTEUR][MAX_LARGEUR], int lignes2, int colonnes2)
 {
 	int status = DIFFERENTES;
-	if((lignes1 == lignes2) && (colonnes1 == colonnes2))
+	if((lignes1 == lignes2) && (colonnes1 == colonnes2))        //si la valeur des lignes et des colonnes sont identique
     {
-        for(int j = 0; j < lignes1; j++)
+        for(int j = 0; j < lignes1; j++)        // Augmenter j pendant que j est plus petit que la taille en lignes des matrices
         {
-            for(int n = 0; n < colonnes2; n++)
+            for(int n = 0; n < colonnes2; n++)  // Augmenter n pendant que n est plus petit que la taille en lignes des matrices
             {
                 if((matrice1[n][j].valeurR != matrice2[n][j].valeurR)
-                   ||(matrice1[n][j].valeurG != matrice2[n][j].valeurG)
+                   ||(matrice1[n][j].valeurG != matrice2[n][j].valeurG)     //Arrêter la boucle et retourner DIFFERENTES si les valeur ne sont pas identique
                    ||(matrice1[n][j].valeurB != matrice2[n][j].valeurB))
                 {
                     return status;
                 }
             }
         }
-        status = IDENTIQUES;
+        status = IDENTIQUES;//indiquer IDENTIQUE
     }
 
 	return status;
@@ -754,15 +753,15 @@ int ppm_pivoter90(struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR], int *p_lignes, i
     switch(sens)
     {
     default :
-        status = ERREUR;
+        status = ERREUR;    // si le sens donné est erroné
         break;
 
-    case SENS_ANTIHORAIRE:
+    case SENS_ANTIHORAIRE:          // si le sens est Antihoraire
 
-        for(int j = 0 ; j<*p_lignes; j++)
+        for(int j = 0 ; j<*p_lignes; j++)       // Augmenter j pendant que j est plus petit que la taille en lignes des matrices
         {
             k = *p_colonnes;
-            for(int n = 0; n< *p_colonnes; n++)
+            for(int n = 0; n< *p_colonnes; n++) // Augmenter n pendant que n est plus petit que la taille en lignes des matrices
             {
                 k--;
                 matriceTempR[k][j] = matrice[j][n].valeurR;
@@ -770,50 +769,50 @@ int ppm_pivoter90(struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR], int *p_lignes, i
                 matriceTempB[k][j] = matrice[j][n].valeurB;
             }
         }
-         for(int j = 0; j<*p_lignes; j++)
+         for(int j = 0; j<*p_lignes; j++)       // Augmenter j pendant que j est plus petit que la taille en lignes des matrices
         {
-            for(int n = 0; n<*p_colonnes; n++)
+            for(int n = 0; n<*p_colonnes; n++)  // Augmenter n pendant que n est plus petit que la taille en lignes des matrices
             {
                 matrice[n][j].valeurR = matriceTempR[n][j];
-                matrice[n][j].valeurG = matriceTempG[n][j];
+                matrice[n][j].valeurG = matriceTempG[n][j];     //transferer la matrice tournée dans la matrice
                 matrice[n][j].valeurB = matriceTempB[n][j];
 
             }
         }
          temp = *p_colonnes;
-        *p_colonnes = *p_lignes;
+        *p_colonnes = *p_lignes;    //Modifier la taille des colonnes et des lignes
         *p_lignes = temp;
         status = OK;
         break;
 
-    case SENS_HORAIRE:
+    case SENS_HORAIRE:          // si le sens est horaire
 
 
 
 
 
-         for(int j = 0 ; j<*p_lignes; j++)
+         for(int j = 0 ; j<*p_lignes; j++)                  // Augmenter j pendant que j est plus petit que la taille en lignes des matrices
         {
             k--;
-            for(int n = 0; n< *p_colonnes; n++)
+            for(int n = 0; n< *p_colonnes; n++)             // Augmenter n pendant que n est plus petit que la taille en lignes des matrices
             {
                 matriceTempR[n][k] = matrice[j][n].valeurR;
                 matriceTempG[n][k] = matrice[j][n].valeurG;
                 matriceTempB[n][k] = matrice[j][n].valeurB;
             }
         }
-         for(int j = 0; j<*p_lignes; j++)
+         for(int j = 0; j<*p_lignes; j++)                   // Augmenter j pendant que j est plus petit que la taille en lignes des matrices
         {
-            for(int n = 0; n<*p_colonnes; n++)
+            for(int n = 0; n<*p_colonnes; n++)              // Augmenter n pendant que n est plus petit que la taille en lignes des matrices
             {
                 matrice[n][j].valeurR = matriceTempR[n][j];
-                matrice[n][j].valeurG = matriceTempG[n][j];
+                matrice[n][j].valeurG = matriceTempG[n][j];     //transferer la matrice tournée dans la matrice
                 matrice[n][j].valeurB = matriceTempB[n][j];
 
             }
         }
          temp = *p_colonnes;
-        *p_colonnes = *p_lignes;
+        *p_colonnes = *p_lignes;            //Modifier la taille des colonnes et des lignes
         *p_lignes = temp;
 
         status = OK;

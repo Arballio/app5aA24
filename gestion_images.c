@@ -12,9 +12,9 @@ Description: Fichier de distribution pour GEN145.
 
 int main()
 {
-	//AutoValidation();
-    test_pgm_pivoter90();
-    test_ppm_pivoter90();
+	AutoValidation();
+    //test_pgm_pivoter90();
+    //test_ppm_pivoter90();
     //test_pgm_creer_negatif();
     return 0;
 }
