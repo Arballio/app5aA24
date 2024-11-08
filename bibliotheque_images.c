@@ -53,11 +53,9 @@ int MetaParser(char *strIN,char *strOUT, int pos)
 
 void PrintMatrix(int matrix[MAX_HAUTEUR][MAX_LARGEUR],int ligne, int col)
 {
-    printf("\n");
+    printf("\n\r\t\[");               //Imprimer le début du tableau
     for(int i = 0,LigneMax = 0; i < ligne; i++)    // Augmenter i pendant que i est plus petit que la taille en n des matrices
     {
-        //printf("\r\t\[");               //Imprimer le début d'une rangée
-
         for(int j = 0; j< col;j++)  // Augmenter j pendant que j est plus petit que la taille en n des matrices
         {
         	if((LigneMax>21))
@@ -69,7 +67,7 @@ void PrintMatrix(int matrix[MAX_HAUTEUR][MAX_LARGEUR],int ligne, int col)
 			LigneMax++;
         }
     }
-    printf("\n");
+    printf("]\n");
 
 }
 
@@ -103,15 +101,13 @@ void PrintRGBMatrix(struct RGB matrix[MAX_HAUTEUR][MAX_LARGEUR],int ligne, int c
 int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 			 int *p_lignes, int *p_colonnes,
 			 int *p_maxval, struct MetaData *p_metadonnees)
-{	int status = ERREUR;
-
-
+{
+	int status = ERREUR, meta = 0;
 	char tempbuffer[MAX_HAUTEUR] = {0};
 
 	FILE *fp = fopen(nom_fichier, "r");
-	int meta = 0;
 
-	memset(p_metadonnees->auteur,0,sizeof(p_metadonnees->auteur));
+	memset(p_metadonnees->auteur,0,sizeof(p_metadonnees->auteur)); //Reinitialise les tableaux au cas ou
 	memset(p_metadonnees->dateCreation,0,sizeof(p_metadonnees->dateCreation));
 	memset(p_metadonnees->lieuCreation,0,sizeof(p_metadonnees->lieuCreation));
 
@@ -161,6 +157,12 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 				}
 				*p_lignes = atoi(temp2);
 
+				if(*p_colonnes > MAX_LARGEUR || *p_lignes > MAX_HAUTEUR)
+					{
+					 return ERREUR_TAILLE;
+					}
+
+
 				meta++;
 			}
 			else if(meta == 2)
@@ -176,79 +178,60 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 		memset(tempbuffer,0,sizeof(tempbuffer));
 		}
 
-
-		if(*p_colonnes > MAX_LARGEUR || *p_lignes > MAX_HAUTEUR)
-		{
-		 return ERREUR_TAILLE;
-		}
-
-
 		//Gestion tableau
-
-		//V2
 		int i = 0,L = 0,C = 0;
 		char temp[20] = {0};
 
-		if(fgets(tempbuffer, sizeof(tempbuffer), fp) == NULL){
-
-		}
+		if(fgets(tempbuffer, sizeof(tempbuffer), fp) == NULL){}
 		else{
 				while(1)
 			{
+				int j = 0;
 
-
-			int j = 0;
-
-			while(tempbuffer[i] != ' ' && tempbuffer[i] != '\n' && tempbuffer[i] != '\r'&& tempbuffer[i] != '\0')
-            {
-					temp[j] = tempbuffer[i];
-					j++;i++;
-
-					/*if(i>100)
-						break;*/
-            }
-
-			i++;
-
-			if(tempbuffer[i]== '\n' || tempbuffer[i]== '\0' || tempbuffer[i]== '\r')
+				while(tempbuffer[i] != ' ' && tempbuffer[i] != '\n' && tempbuffer[i] != '\r'&& tempbuffer[i] != '\0')//section un nombre ascii dans la ligne lu du fichier
 				{
-					memset(tempbuffer,0,sizeof(tempbuffer));
-					fgets(tempbuffer, sizeof(tempbuffer), fp);
-					i = 0;
+						temp[j++] = tempbuffer[i++];
 				}
 
-			if(L < *p_lignes)
-			{
-				if(C<*p_colonnes){
-					matrice[L][C] = atoi(temp);
-					C++;
-				}else{
-					C=0;
-					L++;
-					matrice[L][C] = atoi(temp);
-					C++;
-				}
-			}
-			else if(tempbuffer[i] == '\0')//Fin du fichier
-			{
-				fclose(fp);
-				return OK;
-			}
-			else
-			{
-					break;
-			}
+				i++;
 
-			memset(temp,0,sizeof(temp));
+				if(tempbuffer[i]== '\n' || tempbuffer[i]== '\0' || tempbuffer[i]== '\r')//Si fin de ligne, lit une prochaine
+					{
+						memset(tempbuffer,0,sizeof(tempbuffer));
+						fgets(tempbuffer, sizeof(tempbuffer), fp);
+						i = 0;
+					}
+
+				if(L < *p_lignes)//Remplie la matrice
+				{
+					if(C<*p_colonnes){
+						matrice[L][C++] = atoi(temp);
+					}else{
+						matrice[++L][C=0] = atoi(temp);
+						C++;
+					}
+				}
+				else if(tempbuffer[i] == '\0')//Fin du fichier/matrice pleine
+				{
+					//PrintMatrix(matrice,*p_lignes,*p_colonnes);
+					fclose(fp);
+					return OK;
+				}
+				else
+				{
+						break;
+				}
+
+				memset(temp,0,sizeof(temp));
 
 
 			}
 		}
 
-		memset(tempbuffer,0x30,sizeof(tempbuffer));
+		memset(tempbuffer,0x0,sizeof(tempbuffer));
 	}
 
-	//PrintMatrix(matrice,*p_lignes,*p_colonnes);
+	PrintMatrix(matrice,*p_lignes,*p_colonnes);
 
 	fclose(fp);
 
@@ -350,7 +333,7 @@ int pgm_creer_histogramme(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int
 
 int pgm_couleur_preponderante(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes)
 {
-	int resultat = ERREUR, valeurComp,couleur;
+	int resultat = ERREUR, valeurComp = 0,couleur = 0;
 	int histogramme[MAX_VALEUR+1] = {0};
 	resultat = pgm_creer_histogramme(matrice,lignes,colonnes,histogramme);
 

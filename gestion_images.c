@@ -22,7 +22,7 @@ int main()
 	//test_ppm_ecrire();
 	AutoValidation();
 	//test_pgm_ecrire();
-	//test_ppm_lire();
+	//test_pgm_lire();
 	#endif
 
 
@@ -118,11 +118,13 @@ int main()
 
 	printf("\n");
 
-    printf("-> Fin!\n Press enter to continue.");
 
+
+   #endif // SELFTEST
+
+printf("-> Fin!\n Press enter to continue.");
 	char a;
    scanf("%c",&a);
-   #endif // SELFTEST
 
     return 0;
 }
