@@ -15,7 +15,7 @@ struct RGB imageRGB1[MAX_HAUTEUR][MAX_LARGEUR];
 struct RGB imageRGB2[MAX_HAUTEUR][MAX_LARGEUR];
 
 
-#define SELFTEST 0
+#define SELFTEST 1
 int main()
 {
 	#if !(SELFTEST)
@@ -61,14 +61,35 @@ int main()
 		printf("Line = %d, Colonne = %d\n\r",lignes1,colonnes1);
 		printf("max value = %d",maxval);
 
-
 		//PrintMatrix(image1,lignes1,colonnes1);
 
-		//pgm_copier(image1,lignes1,colonnes1,image2,&lignes2,&colonnes2);
+		pgm_copier(image1,lignes1,colonnes1,image2,&lignes2,&colonnes2);
 
-		pgm_ecrire("OUTLECTURE.pgm", image1,
+		pgm_ecrire("RETOURTEST/lectureetcopie.pgm", image1,
 					lignes1, colonnes1,
 					maxval, metadonnees);
+
+
+		pgm_creer_negatif(image1,lignes1,colonnes1,maxval);
+		pgm_ecrire("RETOURTEST/negatif.pgm", image1, lignes1, colonnes1, maxval, metadonnees);
+
+		printf("\nCouleur preponderante et test historigramme: %d\n", pgm_couleur_preponderante(image1,lignes1,colonnes1));
+
+		pgm_eclaircir_noircir(image2,lignes2,colonnes2,maxval,50);
+
+		pgm_ecrire("RETOURTEST/eclaircir.pgm",image2,lignes2,colonnes2,maxval,metadonnees);
+
+		pgm_lire(nom, image1, &lignes1, &colonnes1,&maxval, &metadonnees);
+		pgm_copier(image1,lignes1,colonnes1,image2,&lignes2,&colonnes2);
+
+		pgm_extraire(image1,0,0,50,50,&lignes1,&colonnes1);
+		pgm_ecrire("RETOURTEST/extraire.pgm",image1,lignes1,colonnes1,maxval,metadonnees);
+
+		pgm_pivoter90(image1,&lignes1,&colonnes1,SENS_ANTIHORAIRE);
+		pgm_ecrire("RETOURTEST/pivoterimageextraite.pgm",image1,lignes1,colonnes1,maxval,metadonnees);
+
+		printf("Sont identique IMG1 et IMG2: %d",pgm_sont_identiques(image1,lignes1,colonnes1,image2,lignes2,colonnes2));
+
 
 	}else if(retour == ERREUR_FICHIER)
 	{
@@ -78,7 +99,7 @@ int main()
 		printf("-> ERREUR");
 	}
 
-	/********************Test pour ppm
+	/********************///Test pour ppm
 	strcpy(nom,"Sherbrooke_Frontenac_nuit.ppm");
 	//strcpy(nom,"testfile.ppm");
 
@@ -86,7 +107,7 @@ int main()
                       &lignes1, &colonnes1,
                       &maxval, &metadonnees);
 
-		PrintRGBMatrix(imageRGB1,lignes1,colonnes1);
+		//SPrintRGBMatrix(imageRGB1,lignes1,colonnes1);
 
 
 	printf("-> Retour: ");
