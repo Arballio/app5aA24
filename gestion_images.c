@@ -15,7 +15,7 @@ struct RGB imageRGB1[MAX_HAUTEUR][MAX_LARGEUR];
 struct RGB imageRGB2[MAX_HAUTEUR][MAX_LARGEUR];
 
 
-#define SELFTEST 1
+#define SELFTEST 0
 int main()
 {
 	#if !(SELFTEST)
@@ -40,8 +40,8 @@ int main()
 
     printf("-> Debut!\n");
 
-	strcpy(nom,"Sherbrooke_Frontenac_nuit.pgm");
-	//strcpy(nom,"images/validation.pgm");
+	//strcpy(nom,"Sherbrooke_Frontenac_nuit.pgm");
+	strcpy(nom,"images/validation.pgm");
 
 	//strcpy(nom,"testfile.pgm");
 
@@ -59,13 +59,13 @@ int main()
 			printf("Auteur = %s, Date = %s, Lieu = %s\n\r",
                 metadonnees.auteur,metadonnees.dateCreation,metadonnees.lieuCreation);}
 		printf("Line = %d, Colonne = %d\n\r",lignes1,colonnes1);
-		printf("max value = %d",maxval);
+		printf("max value = %d\n",maxval);
 
 		//PrintMatrix(image1,lignes1,colonnes1);
 
 		pgm_copier(image1,lignes1,colonnes1,image2,&lignes2,&colonnes2);
 
-		pgm_ecrire("RETOURTEST/PGM/lectureetcopie.pgm", image1,
+		pgm_ecrire("RETOURTEST/PGM/lectureetcopie.pgm", image2,
 					lignes1, colonnes1,
 					maxval, metadonnees);
 
@@ -73,7 +73,7 @@ int main()
 		pgm_creer_negatif(image1,lignes1,colonnes1,maxval);
 		pgm_ecrire("RETOURTEST/PGM/negatif.pgm", image1, lignes1, colonnes1, maxval, metadonnees);
 
-		printf("\nCouleur preponderante et test historigramme: %d\n", pgm_couleur_preponderante(image1,lignes1,colonnes1));
+		printf("\nCouleur preponderante et test historigramme: %d\n", pgm_couleur_preponderante(image2,lignes1,colonnes1));
 
 		pgm_eclaircir_noircir(image2,lignes2,colonnes2,maxval,50);
 
@@ -117,7 +117,7 @@ int main()
 		printf("Auteur = %s, Date = %s, Lieu = %s\n\r",
 		metadonnees.auteur,metadonnees.dateCreation,metadonnees.lieuCreation);}
 		printf("Line = %d, Colonne = %d\n\r",lignes1,colonnes1);
-		printf("max value = %d",maxval);
+		printf("max value = %d\n",maxval);
 
 
 		ppm_copier(imageRGB1,lignes1,colonnes1,imageRGB2,&lignes2,&colonnes2);

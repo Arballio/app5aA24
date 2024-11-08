@@ -342,6 +342,7 @@ int pgm_couleur_preponderante(int matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes,
 	if(resultat <= 0)   //si l'histogramme ne retourne pas d'erreur
     {
          valeurComp = histogramme[0];
+         //printf("\n\n%d\n",histogramme[25]);
         for(int i = 0; i < MAX_VALEUR+1; i++) //Parcourir toutes les valeurs possible d'un
         {
             if(valeurComp<histogramme[i])       //Comparer la valeur précédente la plus élevée avec la valeur de l'histograme[i]
